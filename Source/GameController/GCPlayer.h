@@ -11,6 +11,8 @@ class PaperZD;
 class UPaperFlipbookComponent;
 class UCameraComponent;
 class USpringArmComponent;
+class UPaperZDAnimationComponent;
+class UPaperFlipbook;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayer : public APawn
@@ -29,6 +31,10 @@ class GAMECONTROLLER_API AGCPlayer : public APawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Paper, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* PlayerPaperComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Paper, meta = (AllowPrivateAccess = "true"))
+	UPaperZDAnimationComponent* PaperAnimationComponent;
+
+
 public:
 	AGCPlayer();
 
@@ -36,5 +42,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-public:	
+private:
+	UPaperFlipbook* PaperTank;
+
 };
