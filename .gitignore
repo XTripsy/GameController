@@ -72,3 +72,15 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+Source/GameController/MyPlayerController.h
+Source/GameController/MyPlayerController.cpp
+Source/GameController/MyGameModeBase.h
+Source/GameController/MyGameModeBase.cpp
+Source/GameController/GameController.Build.cs
+shadertoolsconfig.json
+GameController.uproject
+Content/NewInputMappingContext.uasset
+Content/NewInputAction.uasset
+.editorconfig
+Source/GameController/GameController.Build.cs
+GameController.uproject
