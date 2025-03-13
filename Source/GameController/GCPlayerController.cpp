@@ -11,9 +11,11 @@ AGCPlayerController::AGCPlayerController()
 {
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext>mapping_context(TEXT("/Game/Input/IMC_Input"));
 	static ConstructorHelpers::FObjectFinder<UInputAction> cursor_action(TEXT("/Game/Input/InputAction/IA_Cursor"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> shoot_action(TEXT("/Game/Input/InputAction/IA_Shoot"));
 
 	InputMappingContext = mapping_context.Object;
 	CursorAction = cursor_action.Object;
+	ShootAction = shoot_action.Object;
 
 	fSensitivity = 5.0f;
 }
@@ -38,6 +40,9 @@ void AGCPlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		EnhancedInputComponent->BindAction(CursorAction, ETriggerEvent::Triggered, this, &AGCPlayerController::Cursor);
+		EnhancedInputComponent->BindAction(CursorAction, ETriggerEvent::Completed, this, &AGCPlayerController::CursorIdle);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AGCPlayerController::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &AGCPlayerController::EndShoot);
 	}
 }
 
@@ -53,4 +58,22 @@ void AGCPlayerController::Cursor(const FInputActionValue& Value)
 	GetMousePosition(vMousePosition.X, vMousePosition.Y);
 	SetMouseLocation(vMousePosition.X + crosshair_vector.X * fSensitivity, vMousePosition.Y - crosshair_vector.Y * fSensitivity);
 	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, world_direction);
+
+	CurrentMouseCursor = EMouseCursor::Hand;
+}
+
+void AGCPlayerController::CursorIdle(const FInputActionValue& value)
+{
+	CurrentMouseCursor = EMouseCursor::Default;
+}
+
+void AGCPlayerController::Shoot()
+{
+	UE_LOG(LogTemp, Error, TEXT("Shoot"));
+	CurrentMouseCursor = EMouseCursor::GrabHand;
+}
+
+void AGCPlayerController::EndShoot()
+{
+	CurrentMouseCursor = EMouseCursor::Default;
 }

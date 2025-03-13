@@ -30,8 +30,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CursorAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShootAction;
+
 private:
 	void Cursor(const FInputActionValue& Value);
+	void CursorIdle(const FInputActionValue& value);
+	void Shoot();
+	void EndShoot();
 
 private:
 	FVector2D vMousePosition;
