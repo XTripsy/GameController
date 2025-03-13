@@ -45,4 +45,7 @@ protected:
 private:
 	UPaperFlipbook* PaperTank;
 
+private:
+	void Slope(float deltatime);
+
 };

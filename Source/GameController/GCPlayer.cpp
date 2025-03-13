@@ -10,6 +10,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Kismet/KismetMathLibrary.h"
+#include "library/LibraryFunction.h"
 
 AGCPlayer::AGCPlayer()
 {
@@ -64,5 +66,32 @@ void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 5);
+	Slope(DeltaTime);
+}
+
+void AGCPlayer::Slope(float deltatime)
+{
+	FVector start = GetActorLocation();
+	FVector end = start + GetActorUpVector() * -40;
+
+	float out_pitch, out_roll;
+	FRotator rot = PlayerPaperComponent->GetRelativeRotation();
+
+	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), start, end, ECollisionChannel::ECC_Visibility, this, true,
+		[&](FHitResult hit)
+		{
+			UKismetMathLibrary::GetSlopeDegreeAngles(GetActorRightVector(), hit.ImpactNormal, GetActorUpVector(), out_pitch, out_roll);
+			out_pitch = FMath::Clamp(out_pitch, -45, 45);
+			out_roll = FMath::Clamp(out_roll, -45, 45);
+			FVector2D vec = FVector2D(out_pitch, out_roll);
+			rot.Pitch = out_pitch;
+			FRotator interp = UKismetMathLibrary::RInterpTo(PlayerPaperComponent->GetRelativeRotation(), rot, deltatime, 1);
+			PlayerPaperComponent->SetWorldRotation(rot);
+		},
+		[]()
+		{
+
+		}
+	);
 }
 
