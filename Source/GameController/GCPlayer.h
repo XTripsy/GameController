@@ -28,12 +28,11 @@ class GAMECONTROLLER_API AGCPlayer : public APawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Capsule, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* PlayerCapsuleComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Paper, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* PlayerPaperComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Paper, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component, meta = (AllowPrivateAccess = "true"))
 	UPaperZDAnimationComponent* PaperAnimationComponent;
-
 
 public:
 	AGCPlayer();
@@ -47,5 +46,4 @@ private:
 
 private:
 	void Slope(float deltatime);
-
 };

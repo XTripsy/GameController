@@ -10,6 +10,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class IInterfacePlayer;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayerController : public APlayerController
@@ -33,7 +34,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+
 private:
+	void Move(const FInputActionValue& Value);
 	void Cursor(const FInputActionValue& Value);
 	void CursorIdle(const FInputActionValue& value);
 	void Shoot();
@@ -42,4 +47,8 @@ private:
 private:
 	FVector2D vMousePosition;
 	float fSensitivity;
+	bool bIsShoot;
+
+private:
+	IInterfacePlayer* InterfacePlayer;
 };

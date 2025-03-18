@@ -17,7 +17,7 @@ AGCPlayer::AGCPlayer()
 {
 	//PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>tank_paper(TEXT("/Game/Assets/Player/Flipbook/MoveRight"));
+	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>tank_paper(TEXT("/Game/Assets/Player/Flipbook/tes_mobil"));
 	PaperTank = tank_paper.Object;
 
 	PlayerCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuelComponent"));
@@ -42,14 +42,15 @@ AGCPlayer::AGCPlayer()
 	PlayerCapsuleComponent->BodyInstance.bLockXRotation = true;
 	PlayerCapsuleComponent->BodyInstance.bLockYTranslation = true;
 
-	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, -5));
-	PlayerPaperComponent->SetRelativeScale3D(FVector::One() * 1.5f);
+	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, 15));
+	PlayerPaperComponent->SetRelativeScale3D(FVector::One() * .4f);
 
 	PlayerSpringArmComponent->bEnableCameraLag = true;
-	PlayerSpringArmComponent->CameraLagSpeed = 5;
+	PlayerSpringArmComponent->CameraLagSpeed = 12.5f;
 
 	PlayerSpringArmComponent->SetRelativeRotation(FRotator(0, -90, 0));
 	PlayerSpringArmComponent->bDoCollisionTest = false;
+	PlayerSpringArmComponent->TargetArmLength = 500;
 
 	PlayerPaperComponent->SetFlipbook(PaperTank);
 	PlayerPaperComponent->SetLooping(true);
@@ -65,7 +66,7 @@ void AGCPlayer::BeginPlay()
 void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 5);
+	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 12);
 	Slope(DeltaTime);
 }
 
@@ -94,4 +95,3 @@ void AGCPlayer::Slope(float deltatime)
 		}
 	);
 }
-
