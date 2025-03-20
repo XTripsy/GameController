@@ -8,11 +8,11 @@
 
 class UCapsuleComponent;
 class PaperZD;
+class UPaperFlipbook;
 class UPaperFlipbookComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UPaperZDAnimationComponent;
-class UPaperFlipbook;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayer : public APawn

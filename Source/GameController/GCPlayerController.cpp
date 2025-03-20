@@ -7,6 +7,9 @@
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
 #include "interface/InterfacePlayer.h"
+#include "library/LibraryFunction.h"
+#include "interface/InterfaceGameMode.h"
+#include "GameFramework/GameModeBase.h"
 
 AGCPlayerController::AGCPlayerController()
 {
@@ -31,6 +34,7 @@ void AGCPlayerController::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 
 	InterfacePlayer = Cast<IInterfacePlayer>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn());
+	InterfaceGameMode = Cast<IInterfaceGameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AGCPlayerController::Tick(float deltaTime)
@@ -71,7 +75,7 @@ void AGCPlayerController::Cursor(const FInputActionValue& Value)
 
 	GetMousePosition(vMousePosition.X, vMousePosition.Y);
 	SetMouseLocation(vMousePosition.X + crosshair_vector.X * fSensitivity, vMousePosition.Y - crosshair_vector.Y * fSensitivity);
-	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, world_direction);
+	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, vMouseWorldLocation);
 
 	if (bIsShoot) return;
 	CurrentMouseCursor = EMouseCursor::Hand;
@@ -86,6 +90,23 @@ void AGCPlayerController::CursorIdle(const FInputActionValue& value)
 void AGCPlayerController::Shoot()
 {
 	UE_LOG(LogTemp, Error, TEXT("Shoot"));
+
+	AActor* player_actor = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
+	FVector player_start = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
+	FVector player_end = vMouseWorldLocation * 10000 + player_start;
+	player_end.Y = 0;
+
+	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), player_start, player_end, ECC_Visibility, player_actor, true,
+		[&](FHitResult hit)
+		{
+			InterfaceGameMode->ISpawnProjectile(player_start, hit.ImpactPoint);
+		},
+		[&]()
+		{
+			InterfaceGameMode->ISpawnProjectile(player_start, player_end);
+		}
+	);
+
 	bIsShoot = true;
 	CurrentMouseCursor = EMouseCursor::GrabHand;
 }

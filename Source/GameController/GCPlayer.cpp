@@ -66,7 +66,7 @@ void AGCPlayer::BeginPlay()
 void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 12);
+	//PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 12);
 	Slope(DeltaTime);
 }
 

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "GCTile.h"
 #include <Kismet/GameplayStatics.h>
 #include "PaperTileMapComponent.h"
@@ -10,6 +9,8 @@
 
 AGCTile::AGCTile()
 {
+	Tags.Add("Ground");
+
 	static ConstructorHelpers::FObjectFinder<UPaperTileMap>tile_map1(TEXT("/Game/Asset/Tile_1"));
 	TileMaps.push_back(tile_map1.Object);
 	static ConstructorHelpers::FObjectFinder<UPaperTileMap>tile_map2(TEXT("/Game/Asset/Tile_2"));
@@ -48,7 +49,7 @@ void AGCTile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 	FVector loc = this->GetActorLocation();
 	float xLoc = InterfaceGameMode->IGetCurrentLocation();
-	this->SetActorLocation(FVector(xLoc + 1750, loc.Y, loc.Z));
+	this->SetActorLocation(FVector(xLoc + 1740, loc.Y, loc.Z));
 	loc = this->GetActorLocation();
 	InterfaceGameMode->ISetCurrentLocation(loc.X);
 }

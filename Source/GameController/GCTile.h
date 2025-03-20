@@ -10,7 +10,6 @@
 class UPaperTileMapComponent;
 class UPaperTileMap;
 class UBoxComponent;
-//class IInterfaceGameMode;
 
 UCLASS()
 class GAMECONTROLLER_API AGCTile : public AActor

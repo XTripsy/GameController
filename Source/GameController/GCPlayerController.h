@@ -11,6 +11,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class IInterfacePlayer;
+class IInterfaceGameMode;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayerController : public APlayerController
@@ -46,9 +47,11 @@ private:
 
 private:
 	FVector2D vMousePosition;
+	FVector vMouseWorldLocation;
 	float fSensitivity;
 	bool bIsShoot;
 
 private:
 	IInterfacePlayer* InterfacePlayer;
+	IInterfaceGameMode* InterfaceGameMode;
 };

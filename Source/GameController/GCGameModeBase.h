@@ -15,10 +15,16 @@ class GAMECONTROLLER_API AGCGameModeBase : public AGameModeBase, public IInterfa
 public:
 	AGCGameModeBase();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	float fXCurrentLoc;
+	TArray<UObject*> Projectiles;
 
 private:
 	virtual void ISetCurrentLocation(float value) override;
 	virtual float IGetCurrentLocation() override;
+	virtual void ISpawnProjectile(FVector start, FVector end) override;
+	virtual void IAddProjectile(UObject* projectile) override;
 };
