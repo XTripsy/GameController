@@ -51,7 +51,7 @@ void AGCPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGCPlayerController::Move);
 		EnhancedInputComponent->BindAction(CursorAction, ETriggerEvent::Triggered, this, &AGCPlayerController::Cursor);
 		EnhancedInputComponent->BindAction(CursorAction, ETriggerEvent::Completed, this, &AGCPlayerController::CursorIdle);
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AGCPlayerController::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AGCPlayerController::Shoot);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &AGCPlayerController::EndShoot);
 	}
 }
@@ -65,7 +65,6 @@ void AGCPlayerController::Move(const FInputActionValue& Value)
 
 void AGCPlayerController::Cursor(const FInputActionValue& Value)
 {
-
 	FVector2D crosshair_vector = Value.Get<FVector2D>();
 	FVector world_location, world_direction;
 
@@ -90,6 +89,9 @@ void AGCPlayerController::CursorIdle(const FInputActionValue& value)
 void AGCPlayerController::Shoot()
 {
 	UE_LOG(LogTemp, Error, TEXT("Shoot"));
+
+	FVector world_location;
+	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, vMouseWorldLocation);
 
 	AActor* player_actor = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 	FVector player_start = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();

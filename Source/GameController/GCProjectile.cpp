@@ -10,15 +10,15 @@
 
 AGCProjectile::AGCProjectile()
 {
-	//this->SetActorHiddenInGame(true);
-
-	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>tank_paper(TEXT("/Game/Assets/Player/Flipbook/MoveRight"));
+	this->SetActorHiddenInGame(true);
+	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>tank_paper(TEXT("/Game/Assets/Projectile/projectile_Flipbook"));
 	PaperTank = tank_paper.Object;
 
 	PlayerPaperComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PlayerPaper"));
 	PlayerPaperComponent->SetupAttachment(RootComponent);
 
 	PlayerPaperComponent->SetFlipbook(PaperTank);
+	PlayerPaperComponent->SetRelativeScale3D(FVector::One() * .15);
 }
 
 void AGCProjectile::BeginPlay()
@@ -42,9 +42,9 @@ void AGCProjectile::EndProjectile()
 void AGCProjectile::IActivate(FVector start, FVector end)
 {
 	float distance = FVector::Dist(start, end);
-	float normal = FMath::Clamp(distance / 10000, .25f, 1.0f);
+	float normal = 3;//FMath::Clamp(distance / 10000, .25f, 1.0f);
 	this->SetActorHiddenInGame(false);
-	this->SetActorLocation(start);
+	this->SetActorLocation(start + FVector(0, -15, 5));
 	//this->SetActorRotation(FRotationMatrix::MakeFromX(hit_normal).Rotator());
 	TweenActor = UDBTweenActor::DOMove("Move", normal, this, end, EaseType::Linear, false);
 	TweenActor->OnComplete.AddUniqueDynamic(this, &AGCProjectile::EndProjectile);
