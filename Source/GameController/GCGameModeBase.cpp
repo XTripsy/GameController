@@ -12,7 +12,7 @@ AGCGameModeBase::AGCGameModeBase()
 	PlayerControllerClass = AGCPlayerController::StaticClass();
 	DefaultPawnClass = AGCPlayer::StaticClass();
 
-	fXCurrentLoc = 3480.0f;
+	fXCurrentLoc = 6980.0f;
 }
 
 void AGCGameModeBase::BeginPlay()

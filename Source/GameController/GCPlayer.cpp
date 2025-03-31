@@ -42,7 +42,7 @@ AGCPlayer::AGCPlayer()
 	PlayerCapsuleComponent->BodyInstance.bLockXRotation = true;
 	PlayerCapsuleComponent->BodyInstance.bLockYTranslation = true;
 
-	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, 15));
+	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, 5));
 	PlayerPaperComponent->SetRelativeScale3D(FVector::One() * .4f);
 
 	PlayerSpringArmComponent->bEnableCameraLag = true;
@@ -66,7 +66,7 @@ void AGCPlayer::BeginPlay()
 void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 12);
+	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 4.5f);
 	Slope(DeltaTime);
 }
 
@@ -94,4 +94,9 @@ void AGCPlayer::Slope(float deltatime)
 
 		}
 	);
+}
+
+void AGCPlayer::IJump()
+{
+	PlayerCapsuleComponent->AddImpulse(FVector(0, 0, 475), FName("None"), true);
 }

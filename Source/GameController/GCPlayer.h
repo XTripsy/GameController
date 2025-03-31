@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "interface/InterfacePlayer.h"
 #include "GCPlayer.generated.h"
 
 class UCapsuleComponent;
@@ -15,7 +16,7 @@ class USpringArmComponent;
 class UPaperZDAnimationComponent;
 
 UCLASS()
-class GAMECONTROLLER_API AGCPlayer : public APawn
+class GAMECONTROLLER_API AGCPlayer : public APawn, public IInterfacePlayer
 {
 	GENERATED_BODY()
 
@@ -46,4 +47,7 @@ private:
 
 private:
 	void Slope(float deltatime);
+
+private:
+	virtual void IJump() override;
 };

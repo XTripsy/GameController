@@ -12,6 +12,7 @@ class UPaperFlipbookComponent;
 class PaperZD;
 class UPaperFlipbook;
 class IInterfaceGameMode;
+class IInterfacePlayer;
 
 UCLASS()
 class GAMECONTROLLER_API AGCProjectile : public AActor, public IInterfaceProjectile
@@ -19,7 +20,7 @@ class GAMECONTROLLER_API AGCProjectile : public AActor, public IInterfaceProject
 	GENERATED_BODY()
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component, meta = (AllowPrivateAccess = "true"))
-	UPaperFlipbookComponent* PlayerPaperComponent;
+	UPaperFlipbookComponent* PaperComponent;
 
 public:
 	AGCProjectile();
@@ -29,10 +30,10 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPaperFlipbook* PaperTank;
+	UPaperFlipbook* Projectile;
 	UDBTweenActor* TweenActor;
 	IInterfaceGameMode* InterfaceGameMode;
-
+	IInterfacePlayer* InterfacePlayer;
 
 private:
 	UFUNCTION()

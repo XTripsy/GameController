@@ -60,7 +60,7 @@ void AGCPlayerController::Move(const FInputActionValue& Value)
 {
 	float input_move = Value.Get<float>();
 	UE_LOG(LogTemp, Warning, TEXT("%f"), input_move);
-	InterfacePlayer->IMove(input_move);
+	//InterfacePlayer->IMove(input_move);
 }
 
 void AGCPlayerController::Cursor(const FInputActionValue& Value)
@@ -91,11 +91,12 @@ void AGCPlayerController::Shoot()
 	UE_LOG(LogTemp, Error, TEXT("Shoot"));
 
 	FVector world_location;
+	GetMousePosition(vMousePosition.X, vMousePosition.Y);
 	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, vMouseWorldLocation);
 
 	AActor* player_actor = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 	FVector player_start = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
-	FVector player_end = vMouseWorldLocation * 10000 + player_start;
+	FVector player_end = vMouseWorldLocation.GetSafeNormal() * 10000 + player_start;
 	player_end.Y = 0;
 
 	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), player_start, player_end, ECC_Visibility, player_actor, true,
