@@ -12,13 +12,14 @@
 #include <Kismet/GameplayStatics.h>
 #include "Kismet/KismetMathLibrary.h"
 #include "library/LibraryFunction.h"
+#include "GCParallax.h"
 
 AGCPlayer::AGCPlayer()
 {
 	//PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>tank_paper(TEXT("/Game/Assets/Player/Flipbook/tes_mobil"));
-	PaperTank = tank_paper.Object;
+	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>car_paper(TEXT("/Game/Assets/Player/Flipbook/tes_mobil"));
+	Car = car_paper.Object;
 
 	PlayerCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuelComponent"));
 	RootComponent = PlayerCapsuleComponent;
@@ -50,9 +51,10 @@ AGCPlayer::AGCPlayer()
 
 	PlayerSpringArmComponent->SetRelativeRotation(FRotator(0, -90, 0));
 	PlayerSpringArmComponent->bDoCollisionTest = false;
-	PlayerSpringArmComponent->TargetArmLength = 500;
+	PlayerSpringArmComponent->TargetArmLength = 600;
+	PlayerSpringArmComponent->TargetOffset = FVector(200.0f, 0.0f, 120.0f);
 
-	PlayerPaperComponent->SetFlipbook(PaperTank);
+	PlayerPaperComponent->SetFlipbook(Car);
 	PlayerPaperComponent->SetLooping(true);
 	PlayerPaperComponent->SetPlayRate(0.4f);
 }
@@ -60,7 +62,8 @@ AGCPlayer::AGCPlayer()
 void AGCPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	GetWorld()->SpawnActor<AGCParallax>(AGCParallax::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator, FActorSpawnParameters());
 }
 
 void AGCPlayer::Tick(float DeltaTime)

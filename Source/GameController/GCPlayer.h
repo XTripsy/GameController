@@ -43,7 +43,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPaperFlipbook* PaperTank;
+	UPaperFlipbook* Car;
 
 private:
 	void Slope(float deltatime);

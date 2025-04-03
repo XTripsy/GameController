@@ -15,7 +15,9 @@ AGCProjectile::AGCProjectile()
 {
 	this->SetActorHiddenInGame(true);
 	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>projectile_loop(TEXT("/Game/Assets/Projectile/Bullet/Sprite/FlipBook/Gun_Projeectile_Loop"));
+	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>projectile_hit(TEXT("/Game/Assets/Projectile/Bullet/Sprite/FlipBook/Gun_Projectile_Impact"));
 	Projectile = projectile_loop.Object;
+	HitProjectile = projectile_hit.Object;
 
 	PaperComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PlayerPaper"));
 	PaperComponent->SetupAttachment(RootComponent);
@@ -41,11 +43,29 @@ void AGCProjectile::Tick(float DeltaTime)
 
 void AGCProjectile::EndProjectile()
 {
-	this->SetActorHiddenInGame(true);
-	InterfaceGameMode->IAddProjectile(this);
-
 	FVector origin = GetActorLocation();
 	FVector player = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
+
+	LibraryFunction::LibrarySphereTraceByChannel(GetWorld(), origin, origin, 100, ECC_Visibility, this, true,
+		[&](FHitResult hit)
+		{
+			AActor* enemy = hit.GetActor();
+
+			if (enemy->ActorHasTag("Enemy"))
+				enemy->TakeDamage(1.0f, *DamageEvent, nullptr, this);
+
+		},
+		[]()
+		{
+
+		}
+	);
+
+	PaperComponent->SetFlipbook(HitProjectile);
+	PaperComponent->SetLooping(false);
+	PaperComponent->Play();
+
+	InterfaceGameMode->IAddProjectile(this);
 
 	if (FVector::Dist(origin, player) < 100)
 		InterfacePlayer->IJump();
@@ -53,6 +73,9 @@ void AGCProjectile::EndProjectile()
 
 void AGCProjectile::IActivate(FVector start, FVector end)
 {
+	PaperComponent->SetFlipbook(Projectile);
+	PaperComponent->SetLooping(true);
+
 	float distance = FVector::Dist(start, end);
 	float normal = FMath::Clamp(distance / 1000, .15f, 4.0f);
 	this->SetActorHiddenInGame(false);

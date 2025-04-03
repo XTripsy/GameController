@@ -31,9 +31,11 @@ protected:
 
 private:
 	UPaperFlipbook* Projectile;
+	UPaperFlipbook* HitProjectile;
 	UDBTweenActor* TweenActor;
 	IInterfaceGameMode* InterfaceGameMode;
 	IInterfacePlayer* InterfacePlayer;
+	FDamageEvent* DamageEvent;
 
 private:
 	UFUNCTION()
