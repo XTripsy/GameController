@@ -16,6 +16,7 @@
 
 AGCPlayer::AGCPlayer()
 {
+	Tags.Add("Player");
 	//PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>car_paper(TEXT("/Game/Assets/Player/Flipbook/tes_mobil"));
@@ -38,12 +39,13 @@ AGCPlayer::AGCPlayer()
 	PlayerCapsuleComponent->InitCapsuleSize(30.0f, 25.0f);
 	PlayerCapsuleComponent->SetSimulatePhysics(true);
 	PlayerCapsuleComponent->SetCollisionProfileName(TEXT("Pawn"));
+	PlayerCapsuleComponent->SetCollisionResponseToChannel(ECC_EngineTraceChannel2, ECR_Ignore);
 	PlayerCapsuleComponent->BodyInstance.bLockZRotation = true;
 	PlayerCapsuleComponent->BodyInstance.bLockYRotation = true;
 	PlayerCapsuleComponent->BodyInstance.bLockXRotation = true;
 	PlayerCapsuleComponent->BodyInstance.bLockYTranslation = true;
 
-	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, 5));
+	PlayerPaperComponent->SetRelativeLocation(FVector(3, 0, 4.0f));
 	PlayerPaperComponent->SetRelativeScale3D(FVector::One() * .4f);
 
 	PlayerSpringArmComponent->bEnableCameraLag = true;
@@ -69,7 +71,7 @@ void AGCPlayer::BeginPlay()
 void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 4.5f);
+	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 300.0f * DeltaTime);
 	Slope(DeltaTime);
 }
 

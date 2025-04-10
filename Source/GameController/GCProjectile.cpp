@@ -13,6 +13,7 @@
 
 AGCProjectile::AGCProjectile()
 {
+	Tags.Add("Projectile");
 	this->SetActorHiddenInGame(true);
 	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>projectile_loop(TEXT("/Game/Assets/Projectile/Bullet/Sprite/FlipBook/Gun_Projeectile_Loop"));
 	static ConstructorHelpers::FObjectFinder<UPaperFlipbook>projectile_hit(TEXT("/Game/Assets/Projectile/Bullet/Sprite/FlipBook/Gun_Projectile_Impact"));
@@ -41,25 +42,28 @@ void AGCProjectile::Tick(float DeltaTime)
 
 }
 
-void AGCProjectile::EndProjectile()
+void AGCProjectile::UpdateProjectile()
 {
 	FVector origin = GetActorLocation();
-	FVector player = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
-
-	LibraryFunction::LibrarySphereTraceByChannel(GetWorld(), origin, origin, 100, ECC_Visibility, this, true,
+	LibraryFunction::LibrarySphereTraceByChannel(GetWorld(), origin, origin, 5, ECC_EngineTraceChannel2, this, true,
 		[&](FHitResult hit)
 		{
 			AActor* enemy = hit.GetActor();
 
 			if (enemy->ActorHasTag("Enemy"))
-				enemy->TakeDamage(1.0f, *DamageEvent, nullptr, this);
-
+				UGameplayStatics::ApplyDamage(enemy, 1.0f, nullptr, this, nullptr);
 		},
-		[]()
+		[&]()
 		{
 
 		}
 	);
+}
+
+void AGCProjectile::EndProjectile()
+{
+	FVector origin = GetActorLocation();
+	FVector player = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
 
 	PaperComponent->SetFlipbook(HitProjectile);
 	PaperComponent->SetLooping(false);
@@ -67,7 +71,7 @@ void AGCProjectile::EndProjectile()
 
 	InterfaceGameMode->IAddProjectile(this);
 
-	if (FVector::Dist(origin, player) < 100)
+	if (FVector::DotProduct(Direction, FVector(0, 0, -1)) < -.5f && FVector::Dist(origin, player) < 100)
 		InterfacePlayer->IJump();
 }
 
@@ -76,6 +80,8 @@ void AGCProjectile::IActivate(FVector start, FVector end)
 	PaperComponent->SetFlipbook(Projectile);
 	PaperComponent->SetLooping(true);
 
+	Direction = (start - end).GetSafeNormal();
+
 	float distance = FVector::Dist(start, end);
 	float normal = FMath::Clamp(distance / 1000, .15f, 4.0f);
 	this->SetActorHiddenInGame(false);
@@ -83,6 +89,7 @@ void AGCProjectile::IActivate(FVector start, FVector end)
 	FRotator rot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), end);
 	this->SetActorRotation(rot);
 	TweenActor = UDBTweenActor::DOMove("Move", normal, this, end, EaseType::Linear, false);
+	TweenActor->OnUpdate.AddUniqueDynamic(this, &AGCProjectile::UpdateProjectile);
 	TweenActor->OnComplete.AddUniqueDynamic(this, &AGCProjectile::EndProjectile);
 }
 

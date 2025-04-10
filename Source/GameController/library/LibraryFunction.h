@@ -29,5 +29,4 @@ public:
 		ECollisionChannel TraceChannel, const AActor* ignore, bool isDebug, std::function<void(TArray<FHitResult>&)> onHit, std::function<void()> unHit);
 	static void LibraryBoxTraceByChannel(UWorld* World, FVector Start, FVector End, FVector BoxExtent,
 		ECollisionChannel TraceChannel, const AActor* ignore, bool isDebug, std::function<void(FHitResult)> onHit, std::function<void()> unHit);
-	static void LibraryCameraShake(APlayerCameraManager* camera_manager, int shake_type);
 };

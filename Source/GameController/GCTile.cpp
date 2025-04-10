@@ -41,6 +41,7 @@ AGCTile::AGCTile()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	BoxComponent->SetCollisionResponseToChannel(ECC_EngineTraceChannel2, ECR_Ignore);
 	BoxComponent->SetGenerateOverlapEvents(true);
 	BoxComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	BoxComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &AGCTile::OnOverlapBegin);
@@ -59,6 +60,8 @@ void AGCTile::BeginPlay()
 
 void AGCTile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (!OtherActor->ActorHasTag("Player")) return;
+
 	int rage = (int)FMath::FRandRange(0.0f, (float)TileMaps.size() - 1);
 	TileMapComponents->SetTileMap(TileMaps[rage]);
 

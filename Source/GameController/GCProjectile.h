@@ -36,8 +36,12 @@ private:
 	IInterfaceGameMode* InterfaceGameMode;
 	IInterfacePlayer* InterfacePlayer;
 	FDamageEvent* DamageEvent;
+	FVector Direction;
 
 private:
+	UFUNCTION()
+	void UpdateProjectile();
+
 	UFUNCTION()
 	void EndProjectile();
 
