@@ -23,7 +23,7 @@ AGCPlayerController::AGCPlayerController()
 	ShootAction = shoot_action.Object;
 	MoveAction = move_action.Object;
 
-	fSensitivity = 5.0f;
+	fSensitivity = 30.0f;
 }
 
 void AGCPlayerController::BeginPlay()
@@ -93,13 +93,12 @@ void AGCPlayerController::Shoot()
 	FVector world_location;
 	GetMousePosition(vMousePosition.X, vMousePosition.Y);
 	DeprojectScreenPositionToWorld(vMousePosition.X, vMousePosition.Y, world_location, vMouseWorldLocation);
-
 	AActor* player_actor = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 	FVector player_start = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn()->GetActorLocation();
 	FVector player_end = vMouseWorldLocation.GetSafeNormal() * 10000 + player_start;
 	player_end.Y = 0;
 
-	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), player_start, player_end, ECC_Visibility, player_actor, true,
+	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), player_start, player_end, ECC_Visibility, player_actor, false,
 		[&](FHitResult hit)
 		{
 			InterfaceGameMode->ISpawnProjectile(player_start, hit.ImpactPoint);

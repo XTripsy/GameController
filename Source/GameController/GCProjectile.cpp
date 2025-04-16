@@ -45,7 +45,7 @@ void AGCProjectile::Tick(float DeltaTime)
 void AGCProjectile::UpdateProjectile()
 {
 	FVector origin = GetActorLocation();
-	LibraryFunction::LibrarySphereTraceByChannel(GetWorld(), origin, origin, 5, ECC_EngineTraceChannel2, this, true,
+	LibraryFunction::LibrarySphereTraceByChannel(GetWorld(), origin, origin, 5, ECC_EngineTraceChannel2, this, false,
 		[&](FHitResult hit)
 		{
 			AActor* enemy = hit.GetActor();

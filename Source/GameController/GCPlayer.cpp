@@ -54,7 +54,8 @@ AGCPlayer::AGCPlayer()
 	PlayerSpringArmComponent->SetRelativeRotation(FRotator(0, -90, 0));
 	PlayerSpringArmComponent->bDoCollisionTest = false;
 	PlayerSpringArmComponent->TargetArmLength = 600;
-	PlayerSpringArmComponent->TargetOffset = FVector(200.0f, 0.0f, 120.0f);
+	//PlayerSpringArmComponent->TargetOffset = FVector(200.0f, 0.0f, 120.0f);
+	PlayerSpringArmComponent->TargetOffset = FVector(FVector::Zero());
 
 	PlayerPaperComponent->SetFlipbook(Car);
 	PlayerPaperComponent->SetLooping(true);
@@ -83,7 +84,7 @@ void AGCPlayer::Slope(float deltatime)
 	float out_pitch, out_roll;
 	FRotator rot = PlayerPaperComponent->GetRelativeRotation();
 
-	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), start, end, ECollisionChannel::ECC_Visibility, this, true,
+	LibraryFunction::LibraryLineTraceByChannel(GetWorld(), start, end, ECollisionChannel::ECC_Visibility, this, false,
 		[&](FHitResult hit)
 		{
 			UKismetMathLibrary::GetSlopeDegreeAngles(GetActorRightVector(), hit.ImpactNormal, GetActorUpVector(), out_pitch, out_roll);
