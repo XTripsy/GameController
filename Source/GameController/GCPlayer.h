@@ -14,6 +14,7 @@ class UPaperFlipbookComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UPaperZDAnimationComponent;
+class UHealthComponent;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayer : public APawn, public IInterfacePlayer
@@ -34,6 +35,9 @@ class GAMECONTROLLER_API AGCPlayer : public APawn, public IInterfacePlayer
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component, meta = (AllowPrivateAccess = "true"))
 	UPaperZDAnimationComponent* PaperAnimationComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component, meta = (AllowPrivateAccess = "true"))
+	UHealthComponent* HealthComponent;
+
 
 public:
 	AGCPlayer();
@@ -41,9 +45,15 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void OnHealthChanged(float CurrentHealth, float MaxHealth);
+
+	UFUNCTION()
+	void OnCharacterDeath();
 
 private:
 	UPaperFlipbook* Car;
+	float fSpeed = 300.0f;
 
 private:
 	void Slope(float deltatime);

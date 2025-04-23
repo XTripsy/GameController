@@ -13,6 +13,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "library/LibraryFunction.h"
 #include "GCParallax.h"
+#include "HealthComponent.h"
 
 AGCPlayer::AGCPlayer()
 {
@@ -60,6 +61,8 @@ AGCPlayer::AGCPlayer()
 	PlayerPaperComponent->SetFlipbook(Car);
 	PlayerPaperComponent->SetLooping(true);
 	PlayerPaperComponent->SetPlayRate(0.4f);
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->SetMaxHealth(200);
 }
 
 void AGCPlayer::BeginPlay()
@@ -67,12 +70,19 @@ void AGCPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorld()->SpawnActor<AGCParallax>(AGCParallax::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator, FActorSpawnParameters());
+	if (HealthComponent)
+	{
+		// Binding fungsi kita ke delegate di HealthComponent
+		HealthComponent->OnHealthChanged.AddDynamic(this, &AGCPlayer::OnHealthChanged);
+		HealthComponent->OnDeath.AddDynamic(this, &AGCPlayer::OnCharacterDeath);
+	}
 }
 
 void AGCPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * 300.0f * DeltaTime);
+
+	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * fSpeed * DeltaTime);
 	Slope(DeltaTime);
 }
 
@@ -105,4 +115,22 @@ void AGCPlayer::Slope(float deltatime)
 void AGCPlayer::IJump()
 {
 	PlayerCapsuleComponent->AddImpulse(FVector(0, 0, 475), FName("None"), true);
+}
+
+void AGCPlayer::OnHealthChanged(float CurrentHealth, float MaxHealth)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Health Changed Char: %.1f / %.1f"), CurrentHealth, MaxHealth);
+	//Get hud->GetHealthUI->InterfaceSetHealth(currentHealth)
+}
+
+void AGCPlayer::OnCharacterDeath()
+{
+	UE_LOG(LogTemp, Error, TEXT("Character mati!"));
+
+	// Disable input, trigger ragdoll, dsb
+	AController* PC = GetController();
+	if (PC) {
+		PC->UnPossess();
+	}
+	fSpeed = 0.0f;
 }
