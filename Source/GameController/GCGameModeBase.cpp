@@ -17,6 +17,7 @@ AGCGameModeBase::AGCGameModeBase()
 
 void AGCGameModeBase::BeginPlay()
 {
+	Super::BeginPlay();
 	for (int i = 0; i < 100; i++)
 	{
 		Projectiles.Add(GetWorld()->SpawnActor<AGCProjectile>(AGCProjectile::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator, FActorSpawnParameters()));

@@ -49,8 +49,8 @@ private:
 	FVector Direction;
 
 private:
-	UFUNCTION()
-	void UpdateProjectile();
+	/*UFUNCTION()
+	void UpdateProjectile();*/
 
 	UFUNCTION()
 	void EndProjectile();
