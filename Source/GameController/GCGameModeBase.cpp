@@ -6,11 +6,13 @@
 #include "GCProjectile.h"
 #include "GCPlayer.h"
 #include "interface/InterfaceProjectile.h"
+#include "GCHUD.h"
 
 AGCGameModeBase::AGCGameModeBase()
 {
 	PlayerControllerClass = AGCPlayerController::StaticClass();
 	DefaultPawnClass = AGCPlayer::StaticClass();
+	HUDClass = AGCHUD::StaticClass();
 
 	fXCurrentLoc = 6980.0f;
 }

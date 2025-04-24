@@ -14,6 +14,8 @@
 #include "library/LibraryFunction.h"
 #include "GCParallax.h"
 #include "HealthComponent.h"
+#include "interface/InterfaceHUD.h"
+#include "GCHUD.h"
 
 AGCPlayer::AGCPlayer()
 {
@@ -121,6 +123,8 @@ void AGCPlayer::IJump()
 void AGCPlayer::OnHealthChanged(float CurrentHealth, float MaxHealth)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Health Changed Char: %.1f / %.1f"), CurrentHealth, MaxHealth);
+	iInterfaceHUD = Cast<IInterfaceHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+	iInterfaceHUD->UpdateHealth(CurrentHealth / MaxHealth);
 }
 
 void AGCPlayer::OnCharacterDeath()
@@ -135,6 +139,7 @@ void AGCPlayer::GameoverCheck()
 	if (this->GetActorLocation().Z <= -1300.0f)
 	{
 		fSpeed = 0.0f;
+		HealthComponent->Heal(-100);
 		UE_LOG(LogTemp, Warning, TEXT("Mati AJG"));
 	}
 }

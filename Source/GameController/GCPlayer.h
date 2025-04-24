@@ -15,6 +15,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UPaperZDAnimationComponent;
 class UHealthComponent;
+class IInterfaceHUD;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayer : public APawn, public IInterfacePlayer
@@ -56,6 +57,7 @@ protected:
 private:
 	UPaperFlipbook* Car;
 	float fSpeed = 300.0f;
+	IInterfaceHUD* iInterfaceHUD;
 
 private:
 	void Slope(float deltatime);

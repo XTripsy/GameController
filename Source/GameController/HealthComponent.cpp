@@ -47,11 +47,6 @@ void UHealthComponent::TakeDamage(float DamageAmount)
 
 void UHealthComponent::Heal(float HealAmount)
 {
-    if (HealAmount <= 0.0f || CurrentHealth <= 0.0f)
-    {
-        return;
-    }
-
     CurrentHealth = FMath::Clamp(CurrentHealth + HealAmount, 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 }
