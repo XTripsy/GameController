@@ -38,7 +38,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     UFUNCTION(BlueprintCallable, Category = "Health")
     void TakeDamage(float DamageAmount);
 	void SetMaxHealth(float NewMaxHealth) { MaxHealth = NewMaxHealth; }

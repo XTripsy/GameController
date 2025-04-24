@@ -51,6 +51,8 @@ protected:
 	UFUNCTION()
 	void OnCharacterDeath();
 
+	void GameoverCheck();
+
 private:
 	UPaperFlipbook* Car;
 	float fSpeed = 300.0f;
