@@ -13,6 +13,7 @@ class PaperZD;
 class UPaperFlipbook;
 class IInterfaceGameMode;
 class IInterfacePlayer;
+class USphereComponent;
 
 UCLASS()
 class GAMECONTROLLER_API AGCProjectile : public AActor, public IInterfaceProjectile
@@ -24,6 +25,15 @@ class GAMECONTROLLER_API AGCProjectile : public AActor, public IInterfaceProject
 
 public:
 	AGCProjectile();
+
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* SphereComponent;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+
 
 protected:
 	virtual void BeginPlay() override;

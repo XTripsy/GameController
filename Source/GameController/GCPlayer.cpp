@@ -84,6 +84,7 @@ void AGCPlayer::Tick(float DeltaTime)
 
 	PlayerCapsuleComponent->AddWorldOffset(GetActorForwardVector() * fSpeed * DeltaTime);
 	Slope(DeltaTime);
+	GameoverCheck();
 }
 
 void AGCPlayer::Slope(float deltatime)
@@ -120,17 +121,20 @@ void AGCPlayer::IJump()
 void AGCPlayer::OnHealthChanged(float CurrentHealth, float MaxHealth)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Health Changed Char: %.1f / %.1f"), CurrentHealth, MaxHealth);
-	//Get hud->GetHealthUI->InterfaceSetHealth(currentHealth)
 }
 
 void AGCPlayer::OnCharacterDeath()
-{
-	UE_LOG(LogTemp, Error, TEXT("Character mati!"));
+{;
+	UE_LOG(LogTemp, Warning, TEXT("Mati AJG"));
 
-	// Disable input, trigger ragdoll, dsb
-	AController* PC = GetController();
-	if (PC) {
-		PC->UnPossess();
-	}
 	fSpeed = 0.0f;
+}
+
+void AGCPlayer::GameoverCheck()
+{
+	if (this->GetActorLocation().Z <= -1300.0f)
+	{
+		fSpeed = 0.0f;
+		UE_LOG(LogTemp, Warning, TEXT("Mati AJG"));
+	}
 }
