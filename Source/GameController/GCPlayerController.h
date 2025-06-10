@@ -26,6 +26,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void SetupInputComponent() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	void OpenSerialPort(int32 PortId, int32 BaudRate);
+	void ProcessSerialData(float DeltaTime);
+	void CloseSerialPort();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
@@ -46,18 +50,25 @@ private:
 	void Shoot();
 	void EndShoot();
 
-	void OpenSerialPort(int32 PortId, int32 BaudRate);
-	void SendData(TArray<uint8> Data);
-	TArray<uint8> ReceiveData();
-	void CloseSerialPort();
+	
+	/*void SendData(TArray<uint8> Data);
+	TArray<uint8> ReceiveData();*/
+	
 
 private:
+	UPROPERTY()
 	USerialCom* SerialPort;
 	FVector2D vMousePosition;
 	FVector vMouseWorldLocation;
+	UPROPERTY(EditDefaultsOnly, Category = "FlyingMouse")
 	float fSensitivity;
-	bool bIsShoot;
+	UPROPERTY(EditDefaultsOnly, Category = "FlyingMouse")
+	int32 PortID;
 
+	UPROPERTY(EditDefaultsOnly, Category = "FlyingMouse")
+	int32 BaudRate;
+	bool bIsShoot;
+	FString SerialBuffer;
 private:
 	IInterfacePlayer* InterfacePlayer;
 	IInterfaceGameMode* InterfaceGameMode;
