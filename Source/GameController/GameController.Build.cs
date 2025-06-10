@@ -9,10 +9,11 @@ public class GameController : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "PaperZD", "Paper2D", "DBTween", "UMG"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "PaperZD", "Paper2D", "DBTween", "UMG", "SerialCOM"});
 
         PublicIncludePaths.AddRange(new string[] {
-            Path.Combine(ModuleDirectory, "../../Plugins/DBTween/Source/DBTween/Public")
+            Path.Combine(ModuleDirectory, "../../Plugins/DBTween/Source/DBTween/Public"),
+            Path.Combine(ModuleDirectory, "../../Plugins/SerialCOM/Source/SERIALCOM/Public")
         });
 
         CppStandard = CppStandardVersion.Cpp20;

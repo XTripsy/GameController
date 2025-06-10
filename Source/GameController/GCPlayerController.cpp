@@ -10,6 +10,7 @@
 #include "library/LibraryFunction.h"
 #include "interface/InterfaceGameMode.h"
 #include "GameFramework/GameModeBase.h"
+#include "../../Plugins/SerialCOM/Source/SERIALCOM/Public/SerialCom.h"
 
 AGCPlayerController::AGCPlayerController()
 {
@@ -24,6 +25,8 @@ AGCPlayerController::AGCPlayerController()
 	MoveAction = move_action.Object;
 
 	fSensitivity = 30.0f;
+
+	SerialPort = NewObject<USerialCom>();
 }
 
 void AGCPlayerController::BeginPlay()
@@ -35,6 +38,16 @@ void AGCPlayerController::BeginPlay()
 
 	InterfacePlayer = Cast<IInterfacePlayer>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn());
 	InterfaceGameMode = Cast<IInterfaceGameMode>(GetWorld()->GetAuthGameMode());
+
+	OpenSerialPort(6, 9600);
+
+	TArray<uint8> DataToSend = { 0x01, 0x02, 0x03 };
+	SendData(DataToSend);
+
+	TArray<uint8> ReceivedData = ReceiveData();
+	UE_LOG(LogTemp, Error, TEXT("Data diterima: %s"), *FString::FromHexBlob(ReceivedData.GetData(), ReceivedData.Num()));
+
+	CloseSerialPort();
 }
 
 void AGCPlayerController::Tick(float deltaTime)
@@ -117,4 +130,39 @@ void AGCPlayerController::EndShoot()
 {
 	bIsShoot = false;
 	CurrentMouseCursor = EMouseCursor::Default;
+}
+
+void AGCPlayerController::OpenSerialPort(int32 PortId, int32 BaudRate)
+{
+	if (!SerialPort) return;
+
+	bool a = true;
+
+	//SerialPort->OpenPort(PortName, BaudRate);
+	SerialPort->OpenComPort(a, PortId, BaudRate);
+
+	if (SerialPort->IsOpened())
+		UE_LOG(LogTemp, Error, TEXT("------------------------------------------"));
+}
+
+void AGCPlayerController::SendData(TArray<uint8> Data)
+{
+	if (!SerialPort) return;
+
+	SerialPort->WriteBytes(Data);
+}
+
+TArray<uint8> AGCPlayerController::ReceiveData()
+{
+	if (!SerialPort) return TArray<uint8>();
+
+	return SerialPort->ReadBytes();
+}
+
+void AGCPlayerController::CloseSerialPort()
+{
+	if (!SerialPort) return;
+
+	//SerialPort->ClosePort();
+	SerialPort->Close();
 }

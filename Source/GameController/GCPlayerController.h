@@ -12,6 +12,7 @@ class UInputAction;
 struct FInputActionValue;
 class IInterfacePlayer;
 class IInterfaceGameMode;
+class USerialCom;
 
 UCLASS()
 class GAMECONTROLLER_API AGCPlayerController : public APlayerController
@@ -45,7 +46,13 @@ private:
 	void Shoot();
 	void EndShoot();
 
+	void OpenSerialPort(int32 PortId, int32 BaudRate);
+	void SendData(TArray<uint8> Data);
+	TArray<uint8> ReceiveData();
+	void CloseSerialPort();
+
 private:
+	USerialCom* SerialPort;
 	FVector2D vMousePosition;
 	FVector vMouseWorldLocation;
 	float fSensitivity;
